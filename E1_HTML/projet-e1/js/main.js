@@ -71,31 +71,36 @@ function renderUsers(list) {
     card.appendChild(fullLink);
     grid.appendChild(card);
   });
+  if (typeof initReveal === 'function') {
+    requestAnimationFrame(() => {
+      initReveal();
+      if (!('IntersectionObserver' in window)) {
+        $all('.reveal', grid).forEach(el => el.classList.add('visible'));
+      }
+    });
+  }
 }
 
 function setupSearch() {
   const input = $('#searchInput');
   const clearBtn = $('#clearSearch');
   if (!input) return;
-  const run = debounce(() => {
-    const q = input.value.trim().toLowerCase();
-    if (q.length < 2) {
-      renderUsers(state.users);
+  const handle = () => {
+    const raw = input.value;
+    const q = raw.trim().toLowerCase();
+    if (!q) {
       clearBtn.style.display = 'none';
+      renderUsers(state.users);
       return;
     }
     clearBtn.style.display = 'inline-block';
-    const result = state.users.filter(u => matchUser(u, q));
-    renderUsers(result);
-  }, 200);
-  input.addEventListener('input', run);
+    const filtered = state.users.filter(u => u.name.toLowerCase().includes(q));
+    renderUsers(filtered.length ? filtered : state.users);
+  };
+  input.addEventListener('input', handle);
+  input.addEventListener('search', handle);
+  const form = input.closest('form'); if (form) form.addEventListener('submit', e => e.preventDefault());
   clearBtn.addEventListener('click', () => { input.value=''; clearBtn.style.display='none'; renderUsers(state.users); input.focus();});
-}
-
-function matchUser(user, q) {
-  return user.name.toLowerCase().includes(q)
-    || user.email.toLowerCase().includes(q)
-    || (user.company?.name || '').toLowerCase().includes(q);
 }
 
 /* ----------------------- Page Détail Utilisateur ------------------- */
