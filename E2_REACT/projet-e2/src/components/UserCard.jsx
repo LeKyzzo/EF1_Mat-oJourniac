@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+// Je recompose la carte utilisateur pour afficher les infos clés comme sur la version HTML d'origine.
+
 function formatLink(href, fallback = "—") {
   if (!href) return fallback;
   return href;
@@ -18,6 +20,7 @@ function truncate(text, max) {
 }
 
 function UserCard({ user, todos = [] }) {
+  // Je calcule le nombre de tâches terminées pour alimenter le badge.
   const completedCount = todos.filter((todo) => todo.completed).length;
   const firstTodos = todos.slice(0, 3);
 
@@ -37,6 +40,7 @@ function UserCard({ user, todos = [] }) {
 
   const tags = [];
   if (business) {
+    // Je conserve le tag business en premier pour coller au design initial.
     tags.push(
       <li key="business" className="user-card__tag">
         {business}
@@ -44,6 +48,7 @@ function UserCard({ user, todos = [] }) {
     );
   }
   firstTodos.forEach((todo) => {
+    // Je limite chaque todo à 26 caractères pour éviter de casser la grille responsive.
     tags.push(
       <li key={todo.id} className="user-card__tag user-card__tag--todo">
         {truncate(todo.title, 26)}

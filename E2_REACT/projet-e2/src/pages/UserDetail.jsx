@@ -7,6 +7,8 @@ import TodoFilters from "../components/TodoFilters.jsx";
 import TodoList from "../components/TodoList.jsx";
 import { createTodo, getUser, getUserTodos } from "../services/api.js";
 
+// Je reproduis ici toute la logique de la page user.html avec React pour garder la même UX.
+
 const INITIAL_FORM_STATUS = { state: "idle", message: "" };
 
 function UserDetail() {
@@ -21,6 +23,7 @@ function UserDetail() {
   const [formStatus, setFormStatus] = useState(INITIAL_FORM_STATUS);
 
   useEffect(() => {
+    // Je continue d'utiliser data-page pour profiter des styles ciblés.
     document.body.dataset.page = "user";
     return () => {
       delete document.body.dataset.page;
@@ -43,6 +46,7 @@ function UserDetail() {
       setLoading(true);
       setError("");
       try {
+        // Je charge en parallèle la fiche et les todos pour limiter les aller-retours.
         const [userData, todosData] = await Promise.all([
           getUser(userId),
           getUserTodos(userId),
@@ -73,6 +77,7 @@ function UserDetail() {
   }, [userId]);
 
   const filteredTodos = useMemo(() => {
+    // Je garde exactement les mêmes filtres que sur le projet initial.
     if (activeFilter === "open") {
       return todos.filter((todo) => !todo.completed);
     }
@@ -101,6 +106,7 @@ function UserDetail() {
   };
 
   const handleToggleTodo = useCallback((todoId, completed) => {
+    // Je fais la mise à jour en local car l'API JSONPlaceholder ne persiste pas les changements.
     setTodos((prev) =>
       prev.map((todo) =>
         Number(todo.id) === Number(todoId) ? { ...todo, completed } : todo
@@ -112,6 +118,7 @@ function UserDetail() {
     event.preventDefault();
 
     const trimmedTitle = formTitle.trim();
+    // Je garde les mêmes validations min/max pour rester cohérent avec l'HTML.
     if (trimmedTitle.length < 3) {
       setFormStatus({ state: "error", message: "Titre trop court" });
       return;
@@ -149,6 +156,7 @@ function UserDetail() {
         const providedId = Number(nextTodo.id) || 0;
         const hasProvidedId =
           providedId > 0 && !existingIds.includes(providedId);
+        // L'API renvoie souvent un id 201, donc je recrée un identifiant unique pour ma liste locale.
         const safeId = hasProvidedId ? providedId : maxId + 1 || 1;
         const normalizedTodo = { ...nextTodo, id: safeId };
         return [normalizedTodo, ...prev];

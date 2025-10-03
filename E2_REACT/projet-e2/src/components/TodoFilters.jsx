@@ -1,3 +1,4 @@
+// Je définis mes filtres ici pour les réutiliser facilement et garder l'ordre d'origine.
 const FILTERS = [
   { id: "all", label: "Toutes" },
   { id: "open", label: "En cours" },
@@ -5,6 +6,7 @@ const FILTERS = [
 ];
 
 function TodoFilters({ activeFilter, onChange }) {
+  // Je me contente de boucler sur la configuration pour éviter de dupliquer le markup.
   return (
     <div
       className="todos__filters"

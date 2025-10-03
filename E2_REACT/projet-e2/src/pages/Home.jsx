@@ -4,6 +4,8 @@ import SearchBar from "../components/SearchBar.jsx";
 import UserList from "../components/UserList.jsx";
 import { getUsers, getUserTodos } from "../services/api.js";
 
+// Je pilote toute la page d'accueil depuis ce composant pour recoller au comportement de la version vanilla.
+
 function Home() {
   const [users, setUsers] = useState([]);
   const [todosByUser, setTodosByUser] = useState({});
@@ -12,6 +14,7 @@ function Home() {
   const [query, setQuery] = useState("");
 
   useEffect(() => {
+    // Je garde l'attribut data-page pour profiter des styles/animations existants.
     document.body.dataset.page = "home";
     return () => {
       delete document.body.dataset.page;
@@ -25,6 +28,7 @@ function Home() {
       setLoading(true);
       setError("");
       try {
+        // Je charge les utilisateurs puis les todos associés pour pouvoir filtrer côté client.
         const userList = await getUsers();
         if (isCancelled) return;
 
@@ -66,6 +70,7 @@ function Home() {
   const isSearching = trimmedQuery.length > 0;
 
   const filteredUsers = useMemo(() => {
+    // Je conserve la même logique de recherche : nom, pseudo, société, ville et titres de todos.
     if (!isSearching) return users;
 
     return users.filter((user) => {

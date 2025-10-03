@@ -1,5 +1,7 @@
 import Layout from "../components/Layout.jsx";
 
+// Je garde une page 404 simple mais cohérente avec le layout global.
+
 function NotFound() {
   return (
     <Layout>

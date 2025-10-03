@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
+// J'encapsule ici toute la barre de navigation pour garder le même feeling que la version HTML.
+
 function Header() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // Je fais confiance à matchMedia pour savoir si je repasse en desktop et fermer le burger automatiquement.
   const desktopQuery = useMemo(
     () => window.matchMedia("(min-width: 781px)"),
     []
@@ -26,10 +29,12 @@ function Header() {
   }, [desktopQuery]);
 
   useEffect(() => {
+    // Je synchronise la classe sur le body pour réutiliser les styles existants du projet d'origine.
     document.body.classList.toggle("nav-open", isMenuOpen);
   }, [isMenuOpen]);
 
   useEffect(() => {
+    // Au changement de page, je referme le menu pour éviter les overlays persistants.
     setIsMenuOpen(false);
   }, [location.pathname]);
 

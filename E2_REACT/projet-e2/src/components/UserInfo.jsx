@@ -1,3 +1,4 @@
+// Je rassemble ici toutes les constantes dont j'ai besoin pour garder un rendu propre.
 const DASH = "—";
 const NBSP = "\u00A0";
 
@@ -46,6 +47,7 @@ function UserInfo({ user, todos = [] }) {
   const completedCount = todos.filter((todo) => todo.completed).length;
 
   const subtitleParts = [];
+  // J'utilise quelques séparateurs typographiques pour garder le même rendu qu'en statique.
   if (username) subtitleParts.push(`Pseudo${NBSP}: ${username}`);
   if (companyName) subtitleParts.push(`Entreprise${NBSP}: ${companyName}`);
   if (cityName) subtitleParts.push(`Ville${NBSP}: ${cityName}`);
@@ -58,6 +60,7 @@ function UserInfo({ user, todos = [] }) {
     <>
       <div className="user-info__header">
         <h2 className="user-info__title">{user.name}</h2>
+        {/* Je n'affiche le sous-titre que si j'ai vraiment des infos pour éviter les lignes vides. */}
         {subtitle && <p className="user-info__subtitle">{subtitle}</p>}
       </div>
 

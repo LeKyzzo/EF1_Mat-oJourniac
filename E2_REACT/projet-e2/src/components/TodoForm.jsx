@@ -1,3 +1,4 @@
+// Je garde ce formulaire contrôlé pour pouvoir valider côté client comme sur la version statique.
 function TodoForm({
   title,
   completed,
@@ -7,6 +8,7 @@ function TodoForm({
   status = { state: "idle", message: "" },
 }) {
   const isLoading = status.state === "loading";
+  // Je construis la classe dynamiquement pour réutiliser les styles success / error existants.
   const messageClass = ["form__msg"];
   if (status.state === "error") messageClass.push("error");
   if (status.state === "success") messageClass.push("success");

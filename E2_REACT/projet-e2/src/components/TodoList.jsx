@@ -1,3 +1,4 @@
+// Je m'occupe ici du rendu des tâches avec les mêmes messages vides/chargement que dans la maquette.
 function TodoList({ todos = [], loading = false, onToggle }) {
   return (
     <ul

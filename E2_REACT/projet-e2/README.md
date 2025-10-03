@@ -1,16 +1,53 @@
-# React + Vite
+## ESN Portal – Version React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portage complet du projet **E1_HTML** vers une application React propulsée par Vite. Tout le design, la navigation et les interactions (recherche, listing des utilisateurs, détail avec todos) ont été recréés pour coller au comportement d’origine tout en profitant d’une architecture composants.
 
-Currently, two official plugins are available:
+### Périmètre fonctionnel
+- Listing des utilisateurs avec recherche instantanée sur les profils et leurs tâches.
+- Page détail avec informations enrichies, filtres de tâches et formulaire d’ajout (mocké via JSONPlaceholder).
+- Loader global, navigation responsive et styles strictement alignés sur la version HTML.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Prérequis
+- Node.js 18 ou supérieur
+- npm 9+ (fourni avec Node 18)
 
-## React Compiler
+### Installation
+```powershell
+cd "c:\Users\journ\Downloads\EF1\EF1_Mat-oJourniac\E2_REACT\projet-e2"
+npm install
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Lancer le serveur de développement
+```powershell
+npm run dev
+```
+Le serveur Vite affiche l’URL locale (par défaut http://localhost:5173). Ouvrez-la dans le navigateur pour retrouver l’application.
 
-## Expanding the ESLint configuration
+### Build de production
+```powershell
+npm run build
+```
+Le bundle optimisé est généré dans `dist/`. Pour un aperçu rapide du build :
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```powershell
+npm run preview
+```
+
+### Scripts utiles
+- `npm run lint` : lance ESLint sur le projet (si vous avez besoin de vérifier le style de code).
+- `npm run dev -- --host` : expose le serveur de dev sur le réseau local (pratique pour tester sur mobile).
+
+### Structure rapide
+```
+src/
+├── components/   # Header, UserCard, TodoList, etc.
+├── pages/        # Home, UserDetail, NotFound
+├── services/     # Accès API JSONPlaceholder
+├── styles/       # CSS repris du projet E1
+└── main.jsx      # Bootstrap React + Router
+```
+
+Les commentaires ajoutés dans les fichiers expliquent mes choix d’implémentation et les adaptations par rapport à la version statique.
+
+### API
+L’application s’appuie sur [JSONPlaceholder](https://jsonplaceholder.typicode.com) pour récupérer utilisateurs et todos. Les créations de tâches sont simulées : la réponse de l’API est intégrée côté client mais n’est pas persistée côté serveur.
