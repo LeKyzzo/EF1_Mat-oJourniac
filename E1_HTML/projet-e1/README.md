@@ -12,8 +12,8 @@ Je laisse ici tout ce qu'il faut pour lancer et vérifier l'appli sans se perdre
 
 ## Ce que je vérifie toujours
 
-- La liste d'accueil affiche bien les profils et le bouton "Voir plus" en charge davantage.
-- La recherche réagit sur le nom, le pseudo, l'entreprise ou la ville.
+- La liste d'accueil affiche bien les profils.
+- La recherche réagit sur le nom ou un tache.
 - Le clic sur une carte m'emmène vers `user.html?id=...` avec toutes les infos.
 - Ajouter une tâche la fait apparaître en haut et les filtres Todos restent cohérents.
 
