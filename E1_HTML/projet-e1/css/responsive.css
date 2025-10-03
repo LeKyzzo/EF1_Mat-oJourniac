@@ -1,29 +1,52 @@
-/* responsive.css - styles additionnels spécifiques aux points de rupture */
-/* Stratégie Mobile First : on ajoute ce qui améliore l'expérience sur écrans plus larges */
-
-/* Tablette */
 @media (min-width: 768px) {
-  .hero { text-align:left; }
-  .hero__subtitle { width:70%; }
-  .search { margin-left:0; }
-  .user-detail__info { padding:1.5rem 1.65rem; }
-  .user-info__grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-  .todo-form { grid-template-columns: 1fr auto; align-items:end; }
-  .todo-form .field-group:nth-child(1) { grid-column: span 2; }
-  .todos__list { grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); }
+  .hero {
+    text-align: left;
+  }
+  .hero__subtitle {
+    width: 70%;
+  }
+  .search {
+    margin-left: 0;
+  }
+  .user-detail__info {
+    padding: 1.5rem 1.65rem;
+  }
+  .user-info__grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .todo-form {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+  .todo-form .field-group:nth-child(1) {
+    grid-column: span 2;
+  }
+  .todos__list {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
 }
-
-/* Desktop */
 @media (min-width: 1024px) {
-  .hero { padding:4.5rem 0 3.5rem; }
-  .users__grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-  .user-meta { grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); }
-  .todo-form { grid-template-columns: 1fr auto auto; }
-  .todo-form .field-inline { justify-self:start; }
+  .hero {
+    padding: 4.5rem 0 3.5rem;
+  }
+  .users__grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  .user-meta {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .todo-form {
+    grid-template-columns: 1fr auto auto;
+  }
+  .todo-form .field-inline {
+    justify-self: start;
+  }
 }
-
-/* Grands écrans */
 @media (min-width: 1400px) {
-  .hero h1 { font-size:3rem; }
-  .container { width:min(1300px, 90%); }
+  .hero h1 {
+    font-size: 3rem;
+  }
+  .container {
+    width: min(1300px, 90%);
+  }
 }
