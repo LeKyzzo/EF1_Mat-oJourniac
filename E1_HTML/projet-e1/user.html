@@ -1,88 +1,143 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Portail Projets ESN - Détail utilisateur</title>
-  <meta name="description" content="Détails d'un utilisateur et gestion de ses tâches." />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/user.css" />
-  <link rel="stylesheet" href="css/responsive.css" />
-</head>
-<body data-page="user">
-  <div id="loader" class="loader" aria-hidden="true" role="status" aria-live="polite">
-    <span class="loader__spinner" aria-label="Chargement"></span>
-  </div>
-  <header class="site-header" role="banner">
-    <div class="container header__inner">
-      <a class="logo" href="index.html" aria-label="Retour à l'accueil">ESN<span>Portal</span></a>
-      <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="mainNav" aria-label="Menu">
-        <span class="nav-toggle__bar"></span>
-        <span class="nav-toggle__bar"></span>
-        <span class="nav-toggle__bar"></span>
-      </button>
-  <nav id="mainNav" class="main-nav" role="navigation" aria-label="Navigation principale" hidden>
-        <ul class="nav__list">
-          <li><a class="nav__link" href="index.html">Accueil</a></li>
-          <li><a class="nav__link" href="#" data-about>À propos</a></li>
-          <li><a class="nav__link" href="#footer">Contact</a></li>
-        </ul>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Portail Projets ESN - Détail utilisateur</title>
+    <meta
+      name="description"
+      content="Détails d'un utilisateur et gestion de ses tâches."
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/user.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body data-page="user">
+    <div
+      id="loader"
+      class="loader"
+      aria-hidden="true"
+      role="status"
+      aria-live="polite"
+    >
+      <span class="loader__spinner" aria-label="Chargement"></span>
+    </div>
+    <header class="site-header" role="banner">
+      <div class="container header__inner">
+        <a class="logo" href="index.html" aria-label="Retour à l'accueil"
+          >ESN<span>Portal</span></a
+        >
+        <button
+          id="navToggle"
+          class="nav-toggle"
+          aria-expanded="false"
+          aria-controls="mainNav"
+          aria-label="Menu"
+        >
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+          <span class="nav-toggle__bar"></span>
+        </button>
+        <nav
+          id="mainNav"
+          class="main-nav"
+          role="navigation"
+          aria-label="Navigation principale"
+          hidden
+        >
+          <ul class="nav__list">
+            <li><a class="nav__link" href="index.html">Accueil</a></li>
+            <li><a class="nav__link" href="#" data-about>À propos</a></li>
+            <li><a class="nav__link" href="#footer">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="main" class="site-main" tabindex="-1">
+      <nav class="breadcrumb" aria-label="Fil d'Ariane">
+        <ol>
+          <li><a href="index.html">Accueil</a></li>
+          <li aria-current="page" id="breadcrumbUser">Utilisateur</li>
+        </ol>
       </nav>
-    </div>
-  </header>
-  <main id="main" class="site-main" tabindex="-1">
-    <nav class="breadcrumb" aria-label="Fil d'Ariane">
-      <ol>
-        <li><a href="index.html">Accueil</a></li>
-        <li aria-current="page" id="breadcrumbUser">Utilisateur</li>
-      </ol>
-    </nav>
 
-    <section class="user-detail" aria-labelledby="userTitle">
-      <div class="container">
-        <h1 id="userTitle">Utilisateur</h1>
-        <div id="userInfo" class="user-detail__info" aria-live="polite"></div>
-      </div>
-    </section>
+      <section class="user-detail" aria-labelledby="userTitle">
+        <div class="container">
+          <h1 id="userTitle">Utilisateur</h1>
+          <div id="userInfo" class="user-detail__info" aria-live="polite"></div>
+        </div>
+      </section>
 
-    <section class="todos" aria-labelledby="todosTitle">
-      <div class="container">
-        <div class="todos__header">
-          <h2 id="todosTitle">Tâches</h2>
-          <span id="todoCount" class="badge" aria-live="polite"></span>
-        </div>
-        <form id="todoForm" class="todo-form" novalidate>
-          <div class="field-group">
-            <label for="todoTitle">Nouvelle tâche</label>
-            <input id="todoTitle" name="title" type="text" required minlength="3" maxlength="120" placeholder="Intitulé de la tâche" aria-describedby="todoHelp" />
-            <p id="todoHelp" class="field-help">Entre 3 et 120 caractères.</p>
+      <section class="todos" aria-labelledby="todosTitle">
+        <div class="container">
+          <div class="todos__header">
+            <h2 id="todosTitle">Tâches</h2>
+            <span id="todoCount" class="badge" aria-live="polite"></span>
           </div>
-          <div class="field-group field-inline">
-            <label for="todoCompleted">Terminée ?</label>
-            <input id="todoCompleted" name="completed" type="checkbox" />
+          <form id="todoForm" class="todo-form" novalidate>
+            <div class="field-group">
+              <label for="todoTitle">Nouvelle tâche</label>
+              <input
+                id="todoTitle"
+                name="title"
+                type="text"
+                required
+                minlength="3"
+                maxlength="120"
+                placeholder="Intitulé de la tâche"
+                aria-describedby="todoHelp"
+              />
+              <p id="todoHelp" class="field-help">Entre 3 et 120 caractères.</p>
+            </div>
+            <div class="field-group field-inline">
+              <label for="todoCompleted">Terminée ?</label>
+              <input id="todoCompleted" name="completed" type="checkbox" />
+            </div>
+            <button type="submit" class="btn-primary">Ajouter</button>
+            <p
+              class="form__msg"
+              id="formMsg"
+              role="alert"
+              aria-live="assertive"
+            ></p>
+          </form>
+          <div class="todos__filters">
+            <button
+              data-filter="all"
+              class="filter-btn active"
+              aria-pressed="true"
+            >
+              Toutes
+            </button>
+            <button data-filter="open" class="filter-btn" aria-pressed="false">
+              En cours
+            </button>
+            <button data-filter="done" class="filter-btn" aria-pressed="false">
+              Terminées
+            </button>
           </div>
-          <button type="submit" class="btn-primary">Ajouter</button>
-          <p class="form__msg" id="formMsg" role="alert" aria-live="assertive"></p>
-        </form>
-        <div class="todos__filters">
-          <button data-filter="all" class="filter-btn active" aria-pressed="true">Toutes</button>
-          <button data-filter="open" class="filter-btn" aria-pressed="false">En cours</button>
-          <button data-filter="done" class="filter-btn" aria-pressed="false">Terminées</button>
+          <ul
+            id="todosList"
+            class="todos__list"
+            aria-live="polite"
+            aria-busy="false"
+          ></ul>
         </div>
-        <ul id="todosList" class="todos__list" aria-live="polite" aria-busy="false"></ul>
+      </section>
+      <div class="back-wrapper container">
+        <a class="btn-secondary" href="index.html">← Retour</a>
       </div>
-    </section>
-    <div class="back-wrapper container">
-      <a class="btn-secondary" href="index.html">← Retour</a>
-    </div>
-  </main>
-  <footer id="footer" class="site-footer" role="contentinfo">
-    <div class="container footer__inner">
-      <p>&copy; <span id="year"></span> ESN Portal. Projet pédagogique.</p>
-    </div>
-  </footer>
-  <script src="js/utils.js" defer></script>
-  <script src="js/api.js" defer></script>
-  <script src="js/main.js" defer></script>
-</body>
+    </main>
+    <footer id="footer" class="site-footer" role="contentinfo">
+      <div class="container footer__inner">
+        <p>&copy; <span id="year"></span> ESN Portal. Projet pédagogique.</p>
+      </div>
+    </footer>
+    <script src="js/utils.js" defer></script>
+    <script src="js/api.js" defer></script>
+    <script src="js/main.js" defer></script>
+  </body>
 </html>
