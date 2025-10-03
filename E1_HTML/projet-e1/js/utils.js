@@ -19,8 +19,16 @@ function debounce(fn, delay = 250) {
 const Loader = (() => {
   const el = $('#loader');
   return {
-    show() { el?.classList.add('active'); el?.setAttribute('aria-hidden', 'false'); },
-    hide() { el?.classList.remove('active'); el?.setAttribute('aria-hidden', 'true'); }
+    show() {
+      if (!el) return;
+      el.classList.add('active');
+      el.setAttribute('aria-hidden', 'false');
+    },
+    hide() {
+      if (!el) return;
+      el.classList.remove('active');
+      el.setAttribute('aria-hidden', 'true');
+    }
   };
 })();
 

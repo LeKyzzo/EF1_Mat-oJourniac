@@ -6,7 +6,8 @@
   .hero { text-align:left; }
   .hero__subtitle { width:70%; }
   .search { margin-left:0; }
-  .user-detail__info { display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem; }
+  .user-detail__info { padding:1.5rem 1.65rem; }
+  .user-info__grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
   .todo-form { grid-template-columns: 1fr auto; align-items:end; }
   .todo-form .field-group:nth-child(1) { grid-column: span 2; }
   .todos__list { grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); }

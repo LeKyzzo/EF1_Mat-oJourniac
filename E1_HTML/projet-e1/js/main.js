@@ -54,17 +54,66 @@ function renderUsers(list) {
     const todos = state.todosByUser.get(user.id) || [];
     const completed = todos.filter(t => t.completed).length;
     const firstTodos = todos.slice(0, 3);
+    const companyName = user && user.company && user.company.name ? user.company.name : 'Entreprise';
+    const username = user && user.username ? user.username : '';
+    const cityName = user && user.address && user.address.city ? user.address.city : '';
+    const emailRaw = user && user.email ? String(user.email) : '';
+    const phoneRaw = user && user.phone ? String(user.phone) : '';
+    const websiteRaw = user && user.website ? String(user.website) : '';
+    const emailHref = emailRaw ? 'mailto:' + encodeURIComponent(emailRaw) : '';
+    const phoneHref = phoneRaw ? 'tel:' + encodeURIComponent(phoneRaw) : '';
+    const websiteHref = websiteRaw ? (/^https?:\/\//i.test(websiteRaw) ? websiteRaw : 'http://' + websiteRaw) : '';
+    const websiteDisplay = websiteRaw ? websiteRaw.replace(/^https?:\/\//i, '') : '';
+    const emailMarkup = emailHref ? `<a href="${emailHref}">${escapeHtml(emailRaw)}</a>` : '—';
+    const phoneMarkup = phoneHref ? `<a href="${phoneHref}">${escapeHtml(phoneRaw)}</a>` : '—';
+    const websiteMarkup = websiteHref ? `<a href="${escapeHtml(websiteHref)}" target="_blank" rel="noopener">${escapeHtml(websiteDisplay)}</a>` : '—';
+    const catchPhrase = user && user.company && user.company.catchPhrase ? user.company.catchPhrase : '';
+    const business = user && user.company && user.company.bs ? user.company.bs : '';
     const card = createEl('article', { classes:['user-card','reveal'] });
-    const projectsList = firstTodos.map(t => `<li title="${escapeHtml(t.title)}"><span aria-hidden="true">•</span> ${truncate(t.title, 34)}</li>`).join('');
+    const metaHtml = `
+      <ul class="user-card__meta">
+        <li class="user-card__meta-item">
+          <span class="user-card__meta-label">Pseudo</span>
+          <span class="user-card__meta-value">${username ? escapeHtml(username) : '—'}</span>
+        </li>
+        <li class="user-card__meta-item">
+          <span class="user-card__meta-label">Ville</span>
+          <span class="user-card__meta-value">${cityName ? escapeHtml(cityName) : '—'}</span>
+        </li>
+        <li class="user-card__meta-item">
+          <span class="user-card__meta-label">Email</span>
+          <span class="user-card__meta-value">${emailMarkup}</span>
+        </li>
+        <li class="user-card__meta-item">
+          <span class="user-card__meta-label">Téléphone</span>
+          <span class="user-card__meta-value">${phoneMarkup}</span>
+        </li>
+        <li class="user-card__meta-item">
+          <span class="user-card__meta-label">Site web</span>
+          <span class="user-card__meta-value">${websiteMarkup}</span>
+        </li>
+      </ul>`;
+    const catchText = catchPhrase ? `« ${catchPhrase} »` : 'Slogan indisponible pour cette entreprise.';
+    const tags = [];
+    if (business) tags.push(`<li class="user-card__tag">${escapeHtml(business)}</li>`);
+    firstTodos.forEach(todo => {
+      tags.push(`<li class="user-card__tag user-card__tag--todo">${escapeHtml(truncate(todo.title, 26))}</li>`);
+    });
+    if (websiteHref) {
+      tags.push(`<li class="user-card__tag user-card__tag--link">${escapeHtml(websiteDisplay)}</li>`);
+    }
+    const tagsMarkup = tags.length ? `<ul class="user-card__tags" aria-label="Points clés utilisateur">${tags.join('')}</ul>` : '';
     card.innerHTML = `
       <div class="user-card__header">
         <div>
           <h3 class="user-card__title">${escapeHtml(user.name)}</h3>
-          <div class="user-card__company">${escapeHtml(user.company?.name || 'Entreprise')}</div>
+          <div class="user-card__company">${escapeHtml(companyName)}</div>
         </div>
         <span class="badge" aria-label="${completed} tâches terminées">${completed}</span>
       </div>
-      <ul class="user-card__projects" aria-label="Exemples de tâches">${projectsList || '<li>Aucune tâche chargée</li>'}</ul>
+      ${metaHtml}
+      <p class="user-card__catch">${escapeHtml(catchText)}</p>
+      ${tagsMarkup}
       `;
     // Lien couvrant toute la carte
     const fullLink = createEl('a', { classes:['user-card__full'], attrs:{ href:`user.html?id=${user.id}`, 'aria-label':`Voir le détail de ${escapeHtml(user.name)}` } });
@@ -129,16 +178,70 @@ function renderUserInfo(user) {
   $('#breadcrumbUser').textContent = user.name;
   const info = $('#userInfo');
   if (!info) return;
+  const username = user && user.username ? user.username : '';
+  const companyName = user && user.company && user.company.name ? user.company.name : '';
+  const cityName = user && user.address && user.address.city ? user.address.city : '';
+  const street = user && user.address && user.address.street ? user.address.street : '';
+  const suite = user && user.address && user.address.suite ? user.address.suite : '';
+  const zipcode = user && user.address && user.address.zipcode ? user.address.zipcode : '';
+  const geoLat = user && user.address && user.address.geo && user.address.geo.lat ? user.address.geo.lat : '';
+  const geoLng = user && user.address && user.address.geo && user.address.geo.lng ? user.address.geo.lng : '';
+  const emailRaw = user && user.email ? String(user.email) : '';
+  const phoneRaw = user && user.phone ? String(user.phone) : '';
+  const websiteRaw = user && user.website ? String(user.website) : '';
+  const catchPhrase = user && user.company && user.company.catchPhrase ? user.company.catchPhrase : '';
+  const business = user && user.company && user.company.bs ? user.company.bs : '';
+  const emailHref = emailRaw ? 'mailto:' + encodeURIComponent(emailRaw) : '';
+  const phoneHref = phoneRaw ? 'tel:' + encodeURIComponent(phoneRaw) : '';
+  const websiteHref = websiteRaw ? (/^https?:\/\//i.test(websiteRaw) ? websiteRaw : 'http://' + websiteRaw) : '';
+  const websiteDisplay = websiteRaw ? websiteRaw.replace(/^https?:\/\//i, '') : '';
+  const emailMarkup = emailHref ? `<a href="${emailHref}">${escapeHtml(emailRaw)}</a>` : '—';
+  const phoneMarkup = phoneHref ? `<a href="${phoneHref}">${escapeHtml(phoneRaw)}</a>` : '—';
+  const websiteMarkup = websiteHref ? `<a href="${escapeHtml(websiteHref)}" target="_blank" rel="noopener">${escapeHtml(websiteDisplay)}</a>` : '—';
+  const todos = state.todosByUser.get(user.id) || [];
+  const todoCount = todos.length;
+  const completedCount = todos.filter(t => t.completed).length;
+  const subtitleParts = [];
+  if (username) subtitleParts.push(`Pseudo : ${escapeHtml(username)}`);
+  if (companyName) subtitleParts.push(`Entreprise : ${escapeHtml(companyName)}`);
+  if (cityName) subtitleParts.push(`Ville : ${escapeHtml(cityName)}`);
+  const subtitle = subtitleParts.length ? `<p class="user-info__subtitle">${subtitleParts.join(' • ')}</p>` : '';
+  const geoValue = geoLat && geoLng ? `${escapeHtml(geoLat)} / ${escapeHtml(geoLng)}` : '—';
   info.innerHTML = `
-    <div>
-      <h2 style="margin:0 0 .5rem;font-size:1.2rem;">${escapeHtml(user.name)}</h2>
-      <p style="margin:0 0 .75rem;font-size:.85rem;color:var(--color-text-muted);">${escapeHtml(user.email)}</p>
-      <div class="user-meta">
-        <div><span>Entreprise</span>${escapeHtml(user.company?.name || 'N/A')}</div>
-        <div><span>Ville</span>${escapeHtml(user.address?.city || '—')}</div>
-        <div><span>Site Web</span><a href="http://${escapeHtml(user.website)}" target="_blank" rel="noopener">${escapeHtml(user.website)}</a></div>
-        <div><span>Téléphone</span>${escapeHtml(user.phone || '—')}</div>
-      </div>
+    <div class="user-info__header">
+      <h2 class="user-info__title">${escapeHtml(user.name)}</h2>
+      ${subtitle}
+    </div>
+    <div class="user-info__grid">
+      <article class="user-info__section">
+        <h3>Coordonnées</h3>
+        <ul class="user-info__list">
+          <li><span class="user-info__list-label">Email</span>${emailMarkup}</li>
+          <li><span class="user-info__list-label">Téléphone</span>${phoneMarkup}</li>
+          <li><span class="user-info__list-label">Site web</span>${websiteMarkup}</li>
+          <li><span class="user-info__list-label">Total tâches chargées</span>${todoCount}</li>
+          <li><span class="user-info__list-label">Tâches terminées</span>${completedCount}</li>
+        </ul>
+      </article>
+      <article class="user-info__section">
+        <h3>Adresse</h3>
+        <ul class="user-info__list">
+          <li><span class="user-info__list-label">Rue</span>${street ? escapeHtml(street) : '—'}</li>
+          <li><span class="user-info__list-label">Complément</span>${suite ? escapeHtml(suite) : '—'}</li>
+          <li><span class="user-info__list-label">Code postal</span>${zipcode ? escapeHtml(zipcode) : '—'}</li>
+          <li><span class="user-info__list-label">Ville</span>${cityName ? escapeHtml(cityName) : '—'}</li>
+          <li><span class="user-info__list-label">Coordonnées GPS</span>${geoValue}</li>
+        </ul>
+      </article>
+      <article class="user-info__section">
+        <h3>Entreprise & activité</h3>
+        <ul class="user-info__list">
+          <li><span class="user-info__list-label">Nom</span>${companyName ? escapeHtml(companyName) : '—'}</li>
+          <li><span class="user-info__list-label">Slogan</span>${catchPhrase ? `« ${escapeHtml(catchPhrase)} »` : '—'}</li>
+          <li><span class="user-info__list-label">Spécialités</span>${business ? escapeHtml(business) : '—'}</li>
+          <li><span class="user-info__list-label">Identifiant interne</span>${escapeHtml(String(user.id))}</li>
+        </ul>
+      </article>
     </div>`;
 }
 
