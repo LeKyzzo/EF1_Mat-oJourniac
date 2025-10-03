@@ -76,6 +76,36 @@ function initNavMenu() {
     document.body.appendChild(overlay);
   }
   if (!btn || !nav) return;
+  const closeNav = () => {
+    btn.setAttribute("aria-expanded", "false");
+    btn.classList.remove("active");
+    nav.classList.remove("open");
+    if (!window.matchMedia("(max-width: 780px)").matches) {
+      nav.removeAttribute("hidden");
+    } else {
+      setTimeout(() => {
+        if (!nav.classList.contains("open")) nav.setAttribute("hidden", "");
+      }, 250);
+    }
+    document.body.classList.remove("nav-open");
+    overlay.classList.remove("active");
+    overlay.hidden = true;
+  };
+  const syncNavForViewport = () => {
+    const desktop = window.matchMedia("(min-width: 781px)").matches;
+    if (desktop) {
+      nav.removeAttribute("hidden");
+      overlay.classList.remove("active");
+      overlay.hidden = true;
+      document.body.classList.remove("nav-open");
+      btn.setAttribute("aria-expanded", "false");
+      btn.classList.remove("active");
+    } else if (!nav.classList.contains("open")) {
+      nav.setAttribute("hidden", "");
+    }
+  };
+  syncNavForViewport();
+  window.addEventListener("resize", debounce(syncNavForViewport, 150));
   btn.addEventListener("click", () => {
     const expanded = btn.getAttribute("aria-expanded") === "true";
     btn.setAttribute("aria-expanded", String(!expanded));
@@ -88,27 +118,11 @@ function initNavMenu() {
   });
   nav.addEventListener("click", (e) => {
     if (e.target instanceof HTMLAnchorElement) {
-      btn.setAttribute("aria-expanded", "false");
-      btn.classList.remove("active");
-      nav.classList.remove("open");
-      setTimeout(() => {
-        if (!nav.classList.contains("open")) nav.setAttribute("hidden", "");
-      }, 250);
-      document.body.classList.remove("nav-open");
-      overlay.classList.remove("active");
-      overlay.hidden = true;
+      closeNav();
     }
   });
   overlay.addEventListener("click", () => {
-    btn.setAttribute("aria-expanded", "false");
-    btn.classList.remove("active");
-    nav.classList.remove("open");
-    setTimeout(() => {
-      if (!nav.classList.contains("open")) nav.setAttribute("hidden", "");
-    }, 250);
-    document.body.classList.remove("nav-open");
-    overlay.classList.remove("active");
-    overlay.hidden = true;
+    closeNav();
   });
 }
 function enableGlobalA11y() {

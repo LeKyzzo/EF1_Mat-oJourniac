@@ -8,6 +8,8 @@ const state = {
   visibleCount: 0,
   visibleStep: 4,
   isSearching: false,
+  todosPreloaded: false,
+  todosPreloadPromise: null,
 };
 
 const INITIAL_VISIBLE_COUNT = 6;
@@ -39,11 +41,57 @@ async function initHome() {
     setupSearch();
     setupLoadMore();
     initReveal();
+    preloadRemainingTodos();
   } catch (err) {
     showUsersError(err.message);
   } finally {
     Loader.hide();
   }
+}
+
+async function preloadRemainingTodos() {
+  if (!state.users.length) return;
+  const missing = state.users.filter((u) => !state.todosByUser.has(u.id));
+  if (!missing.length) {
+    state.todosPreloaded = true;
+    return;
+  }
+  try {
+    await loadTodosForUsers(missing);
+    state.todosPreloaded = true;
+  } catch (err) {
+    console.warn("Préchargement des tâches échoué", err);
+  }
+}
+
+async function ensureTodosForSearch() {
+  if (state.todosPreloaded) return;
+  if (state.todosPreloadPromise) {
+    try {
+      await state.todosPreloadPromise;
+    } catch (err) {
+      return;
+    }
+    return;
+  }
+  const missing = state.users.filter((u) => !state.todosByUser.has(u.id));
+  if (!missing.length) {
+    state.todosPreloaded = true;
+    return;
+  }
+  state.todosPreloadPromise = loadTodosForUsers(missing)
+    .then(() => {
+      state.todosPreloaded = true;
+    })
+    .catch((err) => {
+      console.warn("Impossible de récupérer toutes les tâches", err);
+    })
+    .finally(() => {
+      state.todosPreloadPromise = null;
+    });
+  try {
+    await state.todosPreloadPromise;
+  } catch (err) {}
 }
 
 async function loadTodosForUsers(users) {
@@ -225,7 +273,8 @@ function setupSearch() {
   const input = $("#searchInput");
   const clearBtn = $("#clearSearch");
   if (!input) return;
-  const handle = () => {
+  const handle = async () => {
+    await ensureTodosForSearch();
     const raw = input.value;
     const q = raw.trim().toLowerCase();
     if (!q) {
@@ -246,11 +295,16 @@ function setupSearch() {
       const city = (
         u && u.address && u.address.city ? u.address.city : ""
       ).toLowerCase();
+      const todos = state.todosByUser.get(u.id) || [];
+      const hasTodoMatch = todos.some((todo) =>
+        (todo && todo.title ? todo.title : "").toLowerCase().includes(q)
+      );
       return (
         name.includes(q) ||
         username.includes(q) ||
         company.includes(q) ||
-        city.includes(q)
+        city.includes(q) ||
+        hasTodoMatch
       );
     });
     state.isSearching = true;
