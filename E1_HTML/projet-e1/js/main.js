@@ -1,5 +1,6 @@
 "use strict";
 
+// État global partagé entre la page d'accueil et la page détaillée.
 const state = {
   users: [],
   todosByUser: new Map(),
@@ -12,9 +13,11 @@ const state = {
   todosPreloadPromise: null,
 };
 
+// Nombre de cartes affichées par défaut à l'initialisation.
 const INITIAL_VISIBLE_COUNT = 6;
 
 window.addEventListener("DOMContentLoaded", () => {
+  // Je détecte dynamiquement la page pour n'initialiser que le nécessaire.
   const page = document.body.getAttribute("data-page");
   if (page === "home") initHome();
   if (page === "user") initUserDetail();
@@ -28,6 +31,7 @@ window.addEventListener("DOMContentLoaded", () => {
 async function initHome() {
   Loader.show();
   try {
+    // Je récupère les profils et les premières tâches pour enrichir les cartes.
     state.users = await getUsers();
     await loadTodosForUsers(state.users.slice(0, 5));
     state.isSearching = false;
@@ -95,6 +99,7 @@ async function ensureTodosForSearch() {
 }
 
 async function loadTodosForUsers(users) {
+  // Je fais les appels de manière parallèle pour éviter de ralentir le rendu.
   const promises = users.map((u) =>
     getUserTodos(u.id)
       .then((t) => state.todosByUser.set(u.id, t))
@@ -368,6 +373,7 @@ async function initUserDetail() {
   }
   Loader.show();
   try {
+    // Je charge en parallèle la fiche utilisateur et ses tâches associées.
     const [user, todos] = await Promise.all([
       getUser(userId),
       getUserTodos(userId),

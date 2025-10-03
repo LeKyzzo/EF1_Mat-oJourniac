@@ -1,4 +1,5 @@
 "use strict";
+// Sélecteurs utilitaires pour alléger le code dans les autres fichiers.
 function $(sel, scope = document) {
   return scope.querySelector(sel);
 }
@@ -30,6 +31,7 @@ const Loader = (() => {
 function initReveal() {
   const els = $all(".reveal");
   if (!("IntersectionObserver" in window) || !els.length) return;
+  // Je déclenche les animations d'apparition uniquement quand l'élément est visible.
   const io = new IntersectionObserver(
     (entries) => {
       for (const e of entries) {
@@ -107,6 +109,7 @@ function initNavMenu() {
   syncNavForViewport();
   window.addEventListener("resize", debounce(syncNavForViewport, 150));
   btn.addEventListener("click", () => {
+    // Je gère l'ouverture/fermeture du menu burger et l'overlay associé.
     const expanded = btn.getAttribute("aria-expanded") === "true";
     btn.setAttribute("aria-expanded", String(!expanded));
     btn.classList.toggle("active");
@@ -132,6 +135,7 @@ function enableGlobalA11y() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  // Je prépare les helpers globaux dès que le DOM est prêt.
   updateYear();
   initNavMenu();
   enableGlobalA11y();
