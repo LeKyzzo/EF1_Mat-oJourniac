@@ -1,0 +1,98 @@
+@media (min-width: 768px) {
+  .hero {
+    text-align: left;
+  }
+  .hero__subtitle {
+    width: 70%;
+  }
+  .search {
+    margin-left: 0;
+  }
+  .user-detail__info {
+    padding: 1.5rem 1.65rem;
+  }
+  .user-info__grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .todo-form {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+  .todo-form .field-group:nth-child(1) {
+    grid-column: span 2;
+  }
+  .todos__list {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .hero {
+    padding: 4.5rem 0 3.5rem;
+  }
+  .users__grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  .todo-form {
+    grid-template-columns: 1fr auto auto;
+  }
+  .todo-form .field-inline {
+    justify-self: start;
+  }
+}
+@media (min-width: 1400px) {
+  .hero h1 {
+    font-size: 3rem;
+  }
+  .container {
+    width: min(1300px, 90%);
+  }
+}
+
+@media (max-width: 780px) {
+  .nav-toggle {
+    display: block;
+  }
+  .main-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: none;
+    background: rgba(15, 17, 21, 0.97);
+    backdrop-filter: blur(10px);
+    padding: 5rem 1.25rem 2rem;
+    transform: translateX(100%);
+    display: flex;
+    z-index: 50;
+    box-shadow: -6px 0 18px -4px rgba(0, 0, 0, 0.55);
+    transition: var(--transition);
+  }
+  .main-nav[hidden] {
+    display: flex;
+    visibility: hidden;
+  }
+  .main-nav.open {
+    transform: translateX(0);
+    visibility: visible;
+  }
+  .nav__list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.1rem;
+    font-size: 1rem;
+    margin-top: -1rem;
+  }
+  body.nav-open {
+    overflow: hidden;
+  }
+  .nav-toggle.active .nav-toggle__bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .nav-toggle.active .nav-toggle__bar:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-toggle.active .nav-toggle__bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}
