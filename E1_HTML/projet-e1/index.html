@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portail Projets ESN - Accueil</title>
+  <meta name="description" content="Portail interne de gestion des projets et tâches des collaborateurs." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body data-page="home">
+  <div id="loader" class="loader" aria-hidden="true" role="status" aria-live="polite">
+    <span class="loader__spinner" aria-label="Chargement"></span>
+  </div>
+  <header class="site-header" role="banner">
+    <div class="container header__inner">
+      <a class="logo" href="index.html" aria-label="Retour à l'accueil">ESN<span>Portal</span></a>
+      <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="mainNav" aria-label="Menu">
+        <span class="nav-toggle__bar"></span>
+        <span class="nav-toggle__bar"></span>
+        <span class="nav-toggle__bar"></span>
+      </button>
+  <nav id="mainNav" class="main-nav" role="navigation" aria-label="Navigation principale" hidden>
+        <ul class="nav__list">
+          <li><a class="nav__link active" href="index.html" aria-current="page">Accueil</a></li>
+          <li><a class="nav__link" href="#" data-about>À propos</a></li>
+          <li><a class="nav__link" href="#footer">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="site-main" tabindex="-1">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="container">
+        <h1 id="heroTitle">Gestion centralisée des projets</h1>
+        <p class="hero__subtitle">Consultez les utilisateurs, leurs projets et suivez l'avancement des tâches.</p>
+        <form id="searchForm" class="search" role="search" aria-label="Recherche utilisateurs ou tâches">
+          <label for="searchInput" class="sr-only">Recherche</label>
+          <input id="searchInput" name="q" type="search" placeholder="Rechercher un utilisateur ou une tâche..." autocomplete="off" aria-describedby="searchHelp" />
+          <button type="reset" id="clearSearch" aria-label="Effacer la recherche">×</button>
+          <p id="searchHelp" class="search__help">Tapez au moins 2 caractères.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="users" aria-labelledby="usersTitle">
+      <div class="container">
+        <h2 id="usersTitle">Utilisateurs & projets</h2>
+        <div id="usersGrid" class="users__grid" aria-live="polite" aria-busy="false"></div>
+      </div>
+    </section>
+  </main>
+  <footer id="footer" class="site-footer" role="contentinfo">
+    <div class="container footer__inner">
+      <p>&copy; <span id="year"></span> ESN Portal. Projet pédagogique.</p>
+    </div>
+  </footer>
+  <script src="js/utils.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
