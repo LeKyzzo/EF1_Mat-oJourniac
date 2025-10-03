@@ -13,9 +13,6 @@ const state = {
   todosPreloadPromise: null,
 };
 
-// Nombre de cartes affichées par défaut à l'initialisation.
-const INITIAL_VISIBLE_COUNT = 6;
-
 window.addEventListener("DOMContentLoaded", () => {
   // Je détecte dynamiquement la page pour n'initialiser que le nécessaire.
   const page = document.body.getAttribute("data-page");
@@ -36,11 +33,9 @@ async function initHome() {
     await loadTodosForUsers(state.users.slice(0, 5));
     state.isSearching = false;
     state.filteredUsers = [];
-    state.visibleStep = state.visibleStep || 4;
+    state.visibleStep = state.users.length || 4;
     // Je limite l'affichage initial pour ne pas surcharger la page d'accueil.
-    state.visibleCount = state.users.length
-      ? Math.min(INITIAL_VISIBLE_COUNT, state.users.length)
-      : 0;
+    state.visibleCount = state.users.length;
     renderUsers(state.users);
     setupSearch();
     setupLoadMore();
