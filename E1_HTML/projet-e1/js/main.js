@@ -6,11 +6,7 @@ const state = {
   todosByUser: new Map(),
   filteredUsers: [],
   activeFilter: "all",
-  visibleCount: 0,
-  visibleStep: 4,
   isSearching: false,
-  todosPreloaded: false,
-  todosPreloadPromise: null,
 };
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -30,67 +26,18 @@ async function initHome() {
   try {
     // Je récupère les profils et les premières tâches pour enrichir les cartes.
     state.users = await getUsers();
-    await loadTodosForUsers(state.users.slice(0, 5));
+    await loadTodosForUsers(state.users);
     state.isSearching = false;
     state.filteredUsers = [];
-    state.visibleStep = state.users.length || 4;
-    // Je limite l'affichage initial pour ne pas surcharger la page d'accueil.
-    state.visibleCount = state.users.length;
+    // Je remplis directement la grille avec l'ensemble des profils disponibles.
     renderUsers(state.users);
     setupSearch();
-    setupLoadMore();
     initReveal();
-    preloadRemainingTodos();
   } catch (err) {
     showUsersError(err.message);
   } finally {
     Loader.hide();
   }
-}
-
-async function preloadRemainingTodos() {
-  if (!state.users.length) return;
-  const missing = state.users.filter((u) => !state.todosByUser.has(u.id));
-  if (!missing.length) {
-    state.todosPreloaded = true;
-    return;
-  }
-  try {
-    await loadTodosForUsers(missing);
-    state.todosPreloaded = true;
-  } catch (err) {
-    console.warn("Préchargement des tâches échoué", err);
-  }
-}
-
-async function ensureTodosForSearch() {
-  if (state.todosPreloaded) return;
-  if (state.todosPreloadPromise) {
-    try {
-      await state.todosPreloadPromise;
-    } catch (err) {
-      return;
-    }
-    return;
-  }
-  const missing = state.users.filter((u) => !state.todosByUser.has(u.id));
-  if (!missing.length) {
-    state.todosPreloaded = true;
-    return;
-  }
-  state.todosPreloadPromise = loadTodosForUsers(missing)
-    .then(() => {
-      state.todosPreloaded = true;
-    })
-    .catch((err) => {
-      console.warn("Impossible de récupérer toutes les tâches", err);
-    })
-    .finally(() => {
-      state.todosPreloadPromise = null;
-    });
-  try {
-    await state.todosPreloadPromise;
-  } catch (err) {}
 }
 
 async function loadTodosForUsers(users) {
@@ -108,22 +55,18 @@ function showUsersError(msg) {
   grid.innerHTML = `<div class="empty-state" role="alert">${msg}</div>`;
 }
 
-function renderUsers(list, options = {}) {
+function renderUsers(list, isSearch = false) {
   const grid = $("#usersGrid");
   if (!grid) return;
-  const isSearch = Boolean(options.isSearch);
-  const respectLimit = options.respectLimit !== false && !isSearch;
-  let limit = state.visibleCount;
-  if (!limit || limit < 0 || respectLimit === false) limit = list.length;
+  const inSearchMode = Boolean(isSearch);
   if (!list.length) {
-    const emptyMsg = isSearch
+    const emptyMsg = inSearchMode
       ? "Aucun profil ne correspond à votre recherche."
       : "Aucun utilisateur.";
     grid.innerHTML = `<p class="empty-state">${emptyMsg}</p>`;
-    syncLoadMoreButton(isSearch, list.length, 0);
     return;
   }
-  const toRender = respectLimit ? list.slice(0, limit) : list;
+  const toRender = list;
   grid.innerHTML = "";
   toRender.forEach((user) => {
     const todos = state.todosByUser.get(user.id) || [];
@@ -249,24 +192,6 @@ function renderUsers(list, options = {}) {
       }
     });
   }
-  syncLoadMoreButton(isSearch, list.length, toRender.length);
-}
-
-function syncLoadMoreButton(isSearch, total, displayed) {
-  const btn = $("#loadMoreUsers");
-  if (!btn) return;
-  if (isSearch) {
-    btn.style.display = "none";
-    btn.setAttribute("aria-hidden", "true");
-    btn.setAttribute("aria-disabled", "true");
-    btn.disabled = true;
-    return;
-  }
-  const hasMore = total > displayed;
-  btn.style.display = hasMore ? "inline-flex" : "none";
-  btn.disabled = !hasMore;
-  btn.setAttribute("aria-hidden", hasMore ? "false" : "true");
-  btn.setAttribute("aria-disabled", hasMore ? "false" : "true");
 }
 
 function setupSearch() {
@@ -274,7 +199,6 @@ function setupSearch() {
   const clearBtn = $("#clearSearch");
   if (!input) return;
   const handle = async () => {
-    await ensureTodosForSearch();
     const raw = input.value;
     const q = raw.trim().toLowerCase();
     if (!q) {
@@ -310,10 +234,10 @@ function setupSearch() {
     state.isSearching = true;
     state.filteredUsers = filtered;
     if (!filtered.length) {
-      renderUsers([], { respectLimit: false, isSearch: true });
+      renderUsers([], true);
       return;
     }
-    renderUsers(filtered, { respectLimit: false, isSearch: true });
+    renderUsers(filtered, true);
   };
   input.addEventListener("input", handle);
   input.addEventListener("search", handle);
@@ -328,37 +252,6 @@ function setupSearch() {
     input.focus();
   });
 }
-
-function showMoreUsers() {
-  if (state.isSearching) return;
-  if (!state.users.length) return;
-  const previous = state.visibleCount;
-  const step = state.visibleStep > 0 ? state.visibleStep : 4;
-  state.visibleCount = Math.min(previous + step, state.users.length);
-  if (state.visibleCount === previous) return;
-  renderUsers(state.users);
-}
-
-function plus() {
-  // Je me sers de ce raccourci pour charger plus de profils à la demande.
-  showMoreUsers();
-}
-
-function setupLoadMore() {
-  const btn = $("#loadMoreUsers");
-  if (!btn) return;
-  if (!btn.dataset.bound) {
-    btn.addEventListener("click", plus);
-    btn.dataset.bound = "true";
-  }
-  const displayed =
-    state.visibleCount && state.users.length
-      ? Math.min(state.visibleCount, state.users.length)
-      : state.users.length;
-  syncLoadMoreButton(state.isSearching, state.users.length, displayed);
-}
-
-window.plus = plus;
 
 async function initUserDetail() {
   const userId = getUrlParam("id");
