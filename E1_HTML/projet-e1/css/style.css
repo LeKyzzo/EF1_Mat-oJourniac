@@ -234,12 +234,6 @@ a:focus-visible {
   padding: 0.25rem;
   display: none;
 }
-.search__help {
-  font-size: 0.7rem;
-  text-align: left;
-  margin: 0.35rem 0 0;
-  color: var(--color-text-muted);
-}
 
 .users {
   padding: 2.5rem 0 3rem;
