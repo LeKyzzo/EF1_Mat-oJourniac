@@ -32,9 +32,6 @@
   .users__grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
-  .user-meta {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  }
   .todo-form {
     grid-template-columns: 1fr auto auto;
   }

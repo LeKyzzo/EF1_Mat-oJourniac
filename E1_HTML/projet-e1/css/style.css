@@ -187,23 +187,6 @@ img {
   visibility: visible;
 }
 
-.btn-link {
-  background: none;
-  border: 0;
-  color: var(--color-primary);
-  font: inherit;
-  cursor: pointer;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.8rem;
-}
-
-.btn-link:hover {
-  color: var(--color-primary-accent);
-}
-
 .btn-primary,
 .btn-secondary {
   --btn-bg: var(--color-primary);
@@ -268,11 +251,6 @@ img {
   border-radius: 999px;
   letter-spacing: 0.5px;
   box-shadow: var(--shadow-sm);
-}
-
-.badge-inline {
-  display: inline-block;
-  margin-left: 0.35rem;
 }
 
 .empty-state {

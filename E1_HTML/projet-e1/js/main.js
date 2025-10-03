@@ -1,19 +1,20 @@
 "use strict";
 
 // État global partagé entre la page d'accueil et la page détaillée.
+// J'y conserve uniquement les infos nécessaires pour orchestrer le rendu côté client.
 const state = {
   users: [],
   todosByUser: new Map(),
-  filteredUsers: [],
   activeFilter: "all",
-  isSearching: false,
 };
 
 window.addEventListener("DOMContentLoaded", () => {
   // Je détecte dynamiquement la page pour n'initialiser que le nécessaire.
+  // De cette façon, je ne déclenche pas inutilement la logique des tâches détaillées sur l'accueil (et inversement).
   const page = document.body.getAttribute("data-page");
   if (page === "home") initHome();
   if (page === "user") initUserDetail();
+  // Je prévois une sécurité pour masquer le loader même si une erreur m'empêche de l'atteindre dans les `finally`.
   setTimeout(() => {
     try {
       Loader.hide();
@@ -27,8 +28,6 @@ async function initHome() {
     // Je récupère les profils et les premières tâches pour enrichir les cartes.
     state.users = await getUsers();
     await loadTodosForUsers(state.users);
-    state.isSearching = false;
-    state.filteredUsers = [];
     // Je remplis directement la grille avec l'ensemble des profils disponibles.
     renderUsers(state.users);
     setupSearch();
@@ -55,6 +54,8 @@ function showUsersError(msg) {
   grid.innerHTML = `<div class="empty-state" role="alert">${msg}</div>`;
 }
 
+// Je gère ici la fabrication des cartes utilisateur pour la grille d'accueil.
+// Le booléen `isSearch` me permet uniquement d'ajuster le message vide.
 function renderUsers(list, isSearch = false) {
   const grid = $("#usersGrid");
   if (!grid) return;
@@ -198,18 +199,18 @@ function setupSearch() {
   const input = $("#searchInput");
   const clearBtn = $("#clearSearch");
   if (!input) return;
+  // Je traite le champ de recherche à la volée pour filtrer les utilisateurs et leurs tâches associées.
   const handle = async () => {
     const raw = input.value;
     const q = raw.trim().toLowerCase();
     if (!q) {
       clearBtn.style.display = "none";
-      state.isSearching = false;
-      state.filteredUsers = [];
       renderUsers(state.users);
       return;
     }
     clearBtn.style.display = "inline-block";
     // Je fouille aussi le pseudo, la société et la ville pour aider ma recherche.
+    // Je scanne chaque profil côté client pour rester instantané : nom, pseudo, société, ville et titres de tâches.
     const filtered = state.users.filter((u) => {
       const name = (u && u.name ? u.name : "").toLowerCase();
       const username = (u && u.username ? u.username : "").toLowerCase();
@@ -231,12 +232,11 @@ function setupSearch() {
         hasTodoMatch
       );
     });
-    state.isSearching = true;
-    state.filteredUsers = filtered;
     if (!filtered.length) {
       renderUsers([], true);
       return;
     }
+    // Je réaffiche uniquement les cartes correspondantes.
     renderUsers(filtered, true);
   };
   input.addEventListener("input", handle);
@@ -246,8 +246,6 @@ function setupSearch() {
   clearBtn.addEventListener("click", () => {
     input.value = "";
     clearBtn.style.display = "none";
-    state.isSearching = false;
-    state.filteredUsers = [];
     renderUsers(state.users);
     input.focus();
   });
@@ -261,7 +259,7 @@ async function initUserDetail() {
   }
   Loader.show();
   try {
-    // Je charge en parallèle la fiche utilisateur et ses tâches associées.
+    // Je charge en parallèle la fiche utilisateur et ses tâches associées pour afficher une page riche dès la première peinture.
     const [user, todos] = await Promise.all([
       getUser(userId),
       getUserTodos(userId),
@@ -280,6 +278,7 @@ async function initUserDetail() {
 }
 
 function renderUserInfo(user) {
+  // Je reconstruis toute la fiche d'identité avec les infos consolidées côté API.
   $("#userTitle").textContent = user.name;
   $("#breadcrumbUser").textContent = user.name;
   const info = $("#userInfo");
@@ -401,6 +400,7 @@ function renderUserInfo(user) {
 }
 
 function renderTodos(todos) {
+  // Je rafraîchis la liste des tâches et le compteur associé pour refléter chaque opération CRUD locale.
   const list = $("#todosList");
   const count = $("#todoCount");
   if (!list) return;
@@ -441,6 +441,7 @@ function renderTodos(todos) {
 }
 
 function setupTodoForm(userId) {
+  // Je gère la création de tâches côté client et je simule un identifiant pour conserver l'ordre.
   const form = $("#todoForm");
   if (!form) return;
   form.addEventListener("submit", async (e) => {
@@ -477,6 +478,7 @@ function setupTodoForm(userId) {
 }
 
 function toggleTodoStatus(id, completed) {
+  // Je mets à jour l'état local de la Map puis je réapplique le filtre actif pour rester cohérent avec l'UI.
   for (const [uid, todos] of state.todosByUser.entries()) {
     const t = todos.find((td) => td.id === id);
     if (t) {
@@ -488,6 +490,7 @@ function toggleTodoStatus(id, completed) {
 }
 
 function setupTodoFilters(userId) {
+  // Je synchronise les boutons de filtre pour qu'ils se comportent comme un groupe de boutons radio.
   const buttons = $all(".filter-btn");
   buttons.forEach((btn) =>
     btn.addEventListener("click", () => {
@@ -504,6 +507,7 @@ function setupTodoFilters(userId) {
 }
 
 function applyActiveFilter(userId) {
+  // Je dérive la liste affichée en fonction du filtre courant.
   const todos = state.todosByUser.get(userId) || [];
   let filtered = todos;
   if (state.activeFilter === "open")

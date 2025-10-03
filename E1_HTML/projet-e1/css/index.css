@@ -211,17 +211,3 @@
   color: #4ade80;
   text-transform: none;
 }
-
-.users__actions {
-  margin-top: 1.6rem;
-  display: flex;
-  justify-content: center;
-}
-.users__actions .btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 220px;
-  gap: 0.45rem;
-  font-size: 0.82rem;
-}
