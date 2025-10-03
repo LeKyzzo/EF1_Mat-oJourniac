@@ -32,6 +32,9 @@ body {
   display: flex;
   flex-direction: column;
 }
+html, body { overflow-x:hidden; }
+/* Désactivation zoom gesture (impact accessibilité) */
+body { touch-action: manipulation; }
 img { max-width: 100%; display: block; }
 a { color: var(--color-primary); text-decoration: none; }
 a:hover, a:focus-visible { color: var(--color-primary-accent); }
