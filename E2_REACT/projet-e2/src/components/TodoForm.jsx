@@ -50,7 +50,11 @@ function TodoForm({
       </button>
 
       {status.message && (
-        <p className={messageClass.join(" ")} role="alert" aria-live="assertive">
+        <p
+          className={messageClass.join(" ")}
+          role="alert"
+          aria-live="assertive"
+        >
           {status.message}
         </p>
       )}

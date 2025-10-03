@@ -6,7 +6,11 @@ const FILTERS = [
 
 function TodoFilters({ activeFilter, onChange }) {
   return (
-    <div className="todos__filters" role="group" aria-label="Filtrer les tâches">
+    <div
+      className="todos__filters"
+      role="group"
+      aria-label="Filtrer les tâches"
+    >
       {FILTERS.map((filter) => {
         const isActive = filter.id === activeFilter;
         return (

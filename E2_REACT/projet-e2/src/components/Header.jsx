@@ -62,7 +62,9 @@ function Header() {
           <ul className="nav__list">
             <li>
               <Link
-                className={`nav__link ${location.pathname === "/" ? "active" : ""}`}
+                className={`nav__link ${
+                  location.pathname === "/" ? "active" : ""
+                }`}
                 to="/"
               >
                 Accueil

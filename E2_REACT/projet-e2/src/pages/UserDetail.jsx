@@ -147,7 +147,8 @@ function UserDetail() {
         const existingIds = prev.map((todo) => Number(todo.id) || 0);
         const maxId = existingIds.length ? Math.max(...existingIds) : 0;
         const providedId = Number(nextTodo.id) || 0;
-        const hasProvidedId = providedId > 0 && !existingIds.includes(providedId);
+        const hasProvidedId =
+          providedId > 0 && !existingIds.includes(providedId);
         const safeId = hasProvidedId ? providedId : maxId + 1 || 1;
         const normalizedTodo = { ...nextTodo, id: safeId };
         return [normalizedTodo, ...prev];
@@ -164,7 +165,8 @@ function UserDetail() {
     }
   };
 
-  const pageTitle = user?.name || (loading ? "Chargement du profil…" : "Utilisateur");
+  const pageTitle =
+    user?.name || (loading ? "Chargement du profil…" : "Utilisateur");
   const badgeCount = filteredTodos.length;
 
   return (
@@ -221,7 +223,10 @@ function UserDetail() {
                 status={formStatus}
               />
 
-              <TodoFilters activeFilter={activeFilter} onChange={handleFilterChange} />
+              <TodoFilters
+                activeFilter={activeFilter}
+                onChange={handleFilterChange}
+              />
 
               <TodoList
                 todos={filteredTodos}

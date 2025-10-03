@@ -21,7 +21,9 @@ function TodoList({ todos = [], loading = false, onToggle }) {
                 type="checkbox"
                 checked={Boolean(todo.completed)}
                 onChange={(event) => onToggle?.(todo.id, event.target.checked)}
-                aria-label={`Marquer comme ${todo.completed ? "en cours" : "terminée"}`}
+                aria-label={`Marquer comme ${
+                  todo.completed ? "en cours" : "terminée"
+                }`}
               />
               <span>✓</span>
             </label>

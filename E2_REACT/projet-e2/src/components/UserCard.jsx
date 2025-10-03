@@ -30,7 +30,8 @@ function UserCard({ user, todos = [] }) {
   const catchPhrase = user?.company?.catchPhrase || "";
   const business = user?.company?.bs || "";
 
-  const { href: websiteHref, display: websiteDisplay } = normalizeWebsite(website);
+  const { href: websiteHref, display: websiteDisplay } =
+    normalizeWebsite(website);
   const emailHref = email ? `mailto:${encodeURIComponent(email)}` : "";
   const phoneHref = phone ? `tel:${encodeURIComponent(phone)}` : "";
 
@@ -64,7 +65,10 @@ function UserCard({ user, todos = [] }) {
           <h3 className="user-card__title">{user.name}</h3>
           <div className="user-card__company">{companyName}</div>
         </div>
-        <span className="badge" aria-label={`${completedCount} tâches terminées`}>
+        <span
+          className="badge"
+          aria-label={`${completedCount} tâches terminées`}
+        >
           {completedCount}
         </span>
       </div>
@@ -81,21 +85,13 @@ function UserCard({ user, todos = [] }) {
         <li className="user-card__meta-item">
           <span className="user-card__meta-label">Email</span>
           <span className="user-card__meta-value">
-            {emailHref ? (
-              <a href={formatLink(emailHref)}>{email}</a>
-            ) : (
-              "—"
-            )}
+            {emailHref ? <a href={formatLink(emailHref)}>{email}</a> : "—"}
           </span>
         </li>
         <li className="user-card__meta-item">
           <span className="user-card__meta-label">Téléphone</span>
           <span className="user-card__meta-value">
-            {phoneHref ? (
-              <a href={formatLink(phoneHref)}>{phone}</a>
-            ) : (
-              "—"
-            )}
+            {phoneHref ? <a href={formatLink(phoneHref)}>{phone}</a> : "—"}
           </span>
         </li>
         <li className="user-card__meta-item">
@@ -113,7 +109,9 @@ function UserCard({ user, todos = [] }) {
       </ul>
 
       <p className="user-card__catch">
-        {catchPhrase ? `« ${catchPhrase} »` : "Slogan indisponible pour cette entreprise."}
+        {catchPhrase
+          ? `« ${catchPhrase} »`
+          : "Slogan indisponible pour cette entreprise."}
       </p>
 
       {tags.length > 0 && (

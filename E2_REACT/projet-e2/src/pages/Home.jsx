@@ -96,7 +96,8 @@ function Home() {
           <div className="container">
             <h1 id="heroTitle">Gestion centralisée des projets</h1>
             <p className="hero__subtitle" id="searchHelp">
-              Consultez les utilisateurs, leurs projets et suivez l&apos;avancement des tâches.
+              Consultez les utilisateurs, leurs projets et suivez
+              l&apos;avancement des tâches.
             </p>
             <SearchBar
               query={query}

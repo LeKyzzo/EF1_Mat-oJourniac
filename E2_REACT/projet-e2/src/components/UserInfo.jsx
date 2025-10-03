@@ -37,7 +37,8 @@ function UserInfo({ user, todos = [] }) {
   const catchPhrase = user?.company?.catchPhrase || "";
   const business = user?.company?.bs || "";
 
-  const { href: websiteHref, display: websiteDisplay } = normalizeWebsite(website);
+  const { href: websiteHref, display: websiteDisplay } =
+    normalizeWebsite(website);
   const emailHref = formatLink(email, "mailto:");
   const phoneHref = formatLink(phone, "tel:");
 
@@ -83,7 +84,9 @@ function UserInfo({ user, todos = [] }) {
               )}
             </li>
             <li>
-              <span className="user-info__list-label">Total tâches chargées</span>
+              <span className="user-info__list-label">
+                Total tâches chargées
+              </span>
               {todoCount}
             </li>
             <li>
@@ -146,4 +149,3 @@ function UserInfo({ user, todos = [] }) {
 }
 
 export default UserInfo;
-
